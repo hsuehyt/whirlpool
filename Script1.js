@@ -1,15 +1,16 @@
 let angle = 0;
-let maxRadius = 795 / 2; // Maximum radius of the invisible circle
-let radius = maxRadius;
+let maxRadius;
+let radius;
 let trailLength = 50; // Length of the ghosting trail
 let trail = [];
-let previousRadius = maxRadius;
+let previousRadius;
+let scalingSpeed;
 
 function setup() {
     createCanvas(800, 800);
-    background(0);
     noStroke();
     fill(255); // White color for the particle
+    startNewCycle();
 }
 
 function draw() {
@@ -17,8 +18,8 @@ function draw() {
     fill(0, 20); // Adjust the second parameter to change the trail length
     rect(0, 0, width, height);
 
-    // Calculate the current radius
-    radius = maxRadius * (1 - (frameCount % 600) / 600);
+    // Update the radius based on the scaling speed
+    radius -= scalingSpeed;
 
     // Clear the trail if the radius resets to maximum
     if (radius > previousRadius) {
@@ -62,4 +63,18 @@ function draw() {
     }
 
     angle += 0.02; // Increment the angle for circular motion
+
+    // Restart the cycle if the radius scales down to 0 or below
+    if (radius <= 0) {
+        startNewCycle();
+    }
+}
+
+function startNewCycle() {
+    maxRadius = random(5, 795);
+    radius = maxRadius;
+    previousRadius = maxRadius;
+    scalingSpeed = maxRadius / 200; // Adjust this value to control the speed of scaling down
+    trail = [];
+    background(0); // Clear the background
 }
