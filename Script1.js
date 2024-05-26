@@ -1,8 +1,8 @@
 let particleSystems = [];
-let maxSystems = 5;
+let maxSystems = 50;
 
 function setup() {
-    createCanvas(800, 800);
+    createCanvas(540, 540);
     noStroke();
     fill(255); // White color for the particles
     for (let i = 0; i < maxSystems; i++) {
@@ -30,7 +30,7 @@ function draw() {
 
 class ParticleSystem {
     constructor() {
-        this.trailLength = 50; // Length of the ghosting trail
+        this.trailLength = 100; // Length of the ghosting trail
         this.startNewCycle();
         this.trail = [];
         this.previousRadius = this.radius;
@@ -38,13 +38,13 @@ class ParticleSystem {
     }
 
     startNewCycle() {
-        this.maxDiameter = random(20, 795); // Random start diameter between 20 and 795
+        this.maxDiameter = random(71, 600); // Random start diameter between 71 and 600
         this.radius = this.maxDiameter / 2;
         this.previousRadius = this.radius;
         this.angle = random(TWO_PI); // Set the starting angle to a random value between 0 and TWO_PI
         this.trail = [];
         this.startTime = millis();
-        this.delay = random(1000, 5000); // Random delay between 1 and 5 seconds
+        this.delay = random(0, 20000); // Random delay between 0 and 20 seconds
     }
 
     update() {
@@ -53,12 +53,12 @@ class ParticleSystem {
             return;
         }
 
-        if (this.radius > 10) {
+        if (this.radius > 35) {
             // Dynamic scaling speed to create a smooth landing
-            let scalingSpeed = map(this.radius, 10, this.previousRadius, 0.05, (this.previousRadius - 10) / 200);
+            let scalingSpeed = map(this.radius, 35, this.previousRadius, 0.05, (this.previousRadius - 35) / 200);
             this.radius -= scalingSpeed;
         } else {
-            this.finished = true; // Mark the system as finished when diameter reaches 20
+            this.finished = true; // Mark the system as finished when diameter reaches 70
         }
 
         let x = width / 2 + this.radius * cos(this.angle);
@@ -86,7 +86,7 @@ class ParticleSystem {
             let pos = this.trail[i];
             let nextPos = this.trail[i + 1];
             let alpha = map(i, 0, this.trail.length - 1, 50, 255); // Gradually increase the alpha value
-            let size = map(i, 0, this.trail.length - 1, 1, 5); // Gradually increase the size of the particles
+            let size = map(i, 0, this.trail.length - 1, 0.5, 2); // Gradually increase the size of the particles
             fill(255, alpha);
 
             let numSteps = dist(pos.x, pos.y, nextPos.x, nextPos.y) / 2.5; // Adjust the step size to ensure no gaps
@@ -101,7 +101,7 @@ class ParticleSystem {
         if (this.trail.length > 0) {
             let finalPos = this.trail[this.trail.length - 1];
             fill(255, 50);
-            ellipse(finalPos.x, finalPos.y, 5, 5); // Largest size for the newest particle
+            ellipse(finalPos.x, finalPos.y, 2, 2); // Largest size for the newest particle
         }
     }
 
