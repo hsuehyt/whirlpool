@@ -3,6 +3,7 @@ let maxRadius = 795 / 2; // Maximum radius of the invisible circle
 let radius = maxRadius;
 let trailLength = 50; // Length of the ghosting trail
 let trail = [];
+let previousRadius = maxRadius;
 
 function setup() {
     createCanvas(800, 800);
@@ -12,10 +13,19 @@ function setup() {
 }
 
 function draw() {
-    background(0); // Black background
+    // Draw a semi-transparent black rectangle to create a fading trail effect
+    fill(0, 20); // Adjust the second parameter to change the trail length
+    rect(0, 0, width, height);
 
     // Calculate the current radius
     radius = maxRadius * (1 - (frameCount % 600) / 600);
+
+    // Clear the trail if the radius resets to maximum
+    if (radius > previousRadius) {
+        trail = [];
+    }
+
+    previousRadius = radius;
 
     let x = width / 2 + radius * cos(angle);
     let y = height / 2 + radius * sin(angle);
@@ -29,28 +39,24 @@ function draw() {
     }
 
     // Draw the particles along the trail
-    for (let i = 0; i < trail.length; i++) {
-        let pos = trail[i];
-        let alpha = map(i, 0, trail.length, 50, 255); // Gradually reduce the alpha value
-        fill(255, alpha);
-        ellipse(pos.x, pos.y, 5, 5);
-    }
-
-    // Draw more particles along the previous positions to form a continuous trail
     for (let i = 0; i < trail.length - 1; i++) {
-        let current = trail[i];
-        let next = trail[i + 1];
-        let distance = dist(current.x, current.y, next.x, next.y);
-        let steps = distance / 5; // Calculate the number of particles needed to fill the gap
+        let pos = trail[i];
+        let nextPos = trail[i + 1];
+        let alpha = map(i, 0, trail.length - 1, 255, 50); // Gradually reduce the alpha value
+        fill(255, alpha);
 
-        for (let j = 0; j < steps; j++) {
-            let intermediateX = lerp(current.x, next.x, j / steps);
-            let intermediateY = lerp(current.y, next.y, j / steps);
-            let alpha = map(i, 0, trail.length, 50, 255); // Gradually reduce the alpha value
-            fill(255, alpha);
-            ellipse(intermediateX, intermediateY, 5, 5);
+        let numSteps = dist(pos.x, pos.y, nextPos.x, nextPos.y) / 2.5; // Adjust the step size to ensure no gaps
+        for (let j = 0; j < numSteps; j++) {
+            let interX = lerp(pos.x, nextPos.x, j / numSteps);
+            let interY = lerp(pos.y, nextPos.y, j / numSteps);
+            ellipse(interX, interY, 5, 5);
         }
     }
+
+    // Ensure the final particle in the trail is drawn
+    let finalPos = trail[trail.length - 1];
+    fill(255, 50);
+    ellipse(finalPos.x, finalPos.y, 5, 5);
 
     angle += 0.02; // Increment the angle for circular motion
 }
