@@ -1,5 +1,6 @@
 let angle = 0;
-let radius = 795 / 2; // Radius of the invisible circle
+let maxRadius = 795 / 2; // Maximum radius of the invisible circle
+let radius = maxRadius;
 
 function setup() {
     createCanvas(800, 800);
@@ -10,6 +11,9 @@ function setup() {
 
 function draw() {
     background(0); // Black background
+
+    // Calculate the current radius
+    radius = maxRadius * (1 - (frameCount % 600) / 600);
 
     let x = width / 2 + radius * cos(angle);
     let y = height / 2 + radius * sin(angle);
