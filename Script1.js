@@ -42,21 +42,24 @@ function draw() {
     for (let i = 0; i < trail.length - 1; i++) {
         let pos = trail[i];
         let nextPos = trail[i + 1];
-        let alpha = map(i, 0, trail.length - 1, 255, 50); // Gradually reduce the alpha value
+        let alpha = map(i, 0, trail.length - 1, 50, 255); // Gradually increase the alpha value
+        let size = map(i, 0, trail.length - 1, 1, 5); // Gradually increase the size of the particles
         fill(255, alpha);
 
         let numSteps = dist(pos.x, pos.y, nextPos.x, nextPos.y) / 2.5; // Adjust the step size to ensure no gaps
         for (let j = 0; j < numSteps; j++) {
             let interX = lerp(pos.x, nextPos.x, j / numSteps);
             let interY = lerp(pos.y, nextPos.y, j / numSteps);
-            ellipse(interX, interY, 5, 5);
+            ellipse(interX, interY, size, size);
         }
     }
 
     // Ensure the final particle in the trail is drawn
-    let finalPos = trail[trail.length - 1];
-    fill(255, 50);
-    ellipse(finalPos.x, finalPos.y, 5, 5);
+    if (trail.length > 0) {
+        let finalPos = trail[trail.length - 1];
+        fill(255, 50);
+        ellipse(finalPos.x, finalPos.y, 5, 5); // Largest size for the newest particle
+    }
 
     angle += 0.02; // Increment the angle for circular motion
 }
