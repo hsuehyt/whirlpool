@@ -76,5 +76,6 @@ function startNewCycle() {
     previousRadius = maxRadius;
     scalingSpeed = maxRadius / 200; // Adjust this value to control the speed of scaling down
     trail = [];
+    angle = random(TWO_PI); // Set the starting angle to a random value between 0 and TWO_PI
     background(0); // Clear the background
 }
