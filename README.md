@@ -23,6 +23,7 @@ The HTML file includes an embedded script that uses the p5.js library to create 
 
 2. **Steps to Run**:
    - Open the `index.html` file in any web browser.
+   - Play the animation directly in your browser using the following URL: [Play Whirlpool](https://hsuehyt.github.io/whirlpool/index.html)
 
 </details>
 
